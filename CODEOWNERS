@@ -1,0 +1,143 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CODEOWNERS — IdeaScope
+#
+# GitHub/GitLab will require a review from the listed owner before any PR
+# that touches the matching files can be merged.
+#
+# One module = one owner.
+# Shared code (core/, base models) = any change needs 2 reviewers.
+#
+# Members
+#   M1  M Naqi Rahmani   → @m-naqi-rahmani
+#   M2  Sufiyaan Imran   → @sufiyaan-imran
+#   M3  Sarmad Arshad    → @sarmad-arshad
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# ── Repo-wide fallback ───────────────────────────────────────────────────────
+# Any file not matched below needs at least one of the three to review.
+*                                               @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# M1 — M Naqi Rahmani
+# AI layer · Readiness Report · Deploy
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend/app/ai/                                 @m-naqi-rahmani
+backend/app/routers/reports.py                  @m-naqi-rahmani
+backend/app/services/report_service.py          @m-naqi-rahmani
+backend/app/models/analysis.py                  @m-naqi-rahmani
+backend/app/models/similar_match.py             @m-naqi-rahmani
+backend/app/models/suggestion.py                @m-naqi-rahmani
+backend/app/models/past_project_feature.py      @m-naqi-rahmani
+backend/app/models/llm_usage.py                 @m-naqi-rahmani
+backend/app/schemas/reports.py                  @m-naqi-rahmani
+backend/tests/test_scoring.py                   @m-naqi-rahmani
+deploy/                                         @m-naqi-rahmani
+frontend/src/pages/student/ReadinessReport.jsx  @m-naqi-rahmani
+frontend/src/pages/student/Suggestions.jsx      @m-naqi-rahmani
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# M2 — Sufiyaan Imran
+# Auth · Users · Groups · Worker · Core · Docker · Alembic
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend/app/core/                               @sufiyaan-imran
+backend/app/worker/                             @sufiyaan-imran
+backend/app/main.py                             @sufiyaan-imran
+backend/alembic/                                @sufiyaan-imran
+backend/alembic.ini                             @sufiyaan-imran
+backend/scripts/                                @sufiyaan-imran
+backend/Dockerfile                              @sufiyaan-imran
+backend/requirements.txt                        @sufiyaan-imran
+docker-compose.yml                              @sufiyaan-imran
+.env.example                                    @sufiyaan-imran
+
+backend/app/routers/auth.py                     @sufiyaan-imran
+backend/app/routers/users.py                    @sufiyaan-imran
+backend/app/routers/groups.py                   @sufiyaan-imran
+backend/app/routers/jobs.py                     @sufiyaan-imran
+backend/app/routers/health.py                   @sufiyaan-imran
+
+backend/app/services/auth_service.py            @sufiyaan-imran
+backend/app/services/user_service.py            @sufiyaan-imran
+backend/app/services/group_service.py           @sufiyaan-imran
+
+backend/app/models/user.py                      @sufiyaan-imran
+backend/app/models/refresh_token.py             @sufiyaan-imran
+backend/app/models/group.py                     @sufiyaan-imran
+backend/app/models/category.py                  @sufiyaan-imran
+backend/app/models/sdg.py                       @sufiyaan-imran
+backend/app/models/audit_log.py                 @sufiyaan-imran
+backend/app/models/job.py                       @sufiyaan-imran
+
+backend/app/schemas/auth.py                     @sufiyaan-imran
+backend/app/schemas/users.py                    @sufiyaan-imran
+backend/app/schemas/groups.py                   @sufiyaan-imran
+backend/app/schemas/jobs.py                     @sufiyaan-imran
+
+backend/tests/test_security.py                  @sufiyaan-imran
+backend/tests/test_roles.py                     @sufiyaan-imran
+
+frontend/src/auth/                              @sufiyaan-imran
+frontend/src/pages/auth/Login.jsx               @sufiyaan-imran
+frontend/src/pages/auth/ChangePassword.jsx      @sufiyaan-imran
+frontend/src/pages/layout/DashboardFrame.jsx    @sufiyaan-imran
+frontend/src/pages/admin/UserManagement.jsx     @sufiyaan-imran
+frontend/src/pages/student/CreateJoinGroup.jsx  @sufiyaan-imran
+frontend/src/routes/                            @sufiyaan-imran
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# M3 — Sarmad Arshad
+# Ingestion · Proposals · Abstracts · Quotas · Settings
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend/app/ingestion/                          @sarmad-arshad
+
+backend/app/routers/abstracts.py                @sarmad-arshad
+backend/app/routers/proposals.py                @sarmad-arshad
+backend/app/routers/quotas.py                   @sarmad-arshad
+backend/app/routers/settings.py                 @sarmad-arshad
+
+backend/app/services/abstract_service.py        @sarmad-arshad
+backend/app/services/proposal_service.py        @sarmad-arshad
+backend/app/services/quota_service.py           @sarmad-arshad
+backend/app/services/settings_service.py        @sarmad-arshad
+
+backend/app/models/import_batch.py              @sarmad-arshad
+backend/app/models/past_project.py              @sarmad-arshad
+backend/app/models/proposal.py                  @sarmad-arshad
+backend/app/models/document.py                  @sarmad-arshad
+backend/app/models/final_scope.py               @sarmad-arshad
+backend/app/models/quota.py                     @sarmad-arshad
+backend/app/models/setting.py                   @sarmad-arshad
+
+backend/app/schemas/abstracts.py                @sarmad-arshad
+backend/app/schemas/proposals.py                @sarmad-arshad
+backend/app/schemas/quotas.py                   @sarmad-arshad
+backend/app/schemas/settings.py                 @sarmad-arshad
+
+backend/tests/test_quota.py                     @sarmad-arshad
+backend/tests/test_ingestion.py                 @sarmad-arshad
+
+frontend/src/pages/admin/ExcelUpload.jsx        @sarmad-arshad
+frontend/src/pages/admin/PastProjects.jsx       @sarmad-arshad
+frontend/src/pages/admin/PastProjectDetail.jsx  @sarmad-arshad
+frontend/src/pages/admin/Quotas.jsx             @sarmad-arshad
+frontend/src/pages/admin/Settings.jsx           @sarmad-arshad
+frontend/src/pages/student/IdeaUpload.jsx       @sarmad-arshad
+frontend/src/pages/student/FinalScope.jsx       @sarmad-arshad
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shared — requires review from 2 members before merge
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend/app/models/base.py                      @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+backend/app/models/__init__.py                  @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+backend/app/schemas/contracts.py                @m-naqi-rahmani @sarmad-arshad
+docs/                                           @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+postman/                                        @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
