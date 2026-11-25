@@ -365,3 +365,66 @@ pytest tests/ -v
 ## Deployment
 
 See `deploy/README_DEPLOY.md` for the full Contabo VPS guide (Nginx, Let's Encrypt, SSH-key only, firewall, daily DB backup). Owned by **M1**.
+
+
+---
+
+## Environment & Development Setup
+
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Git](https://git-scm.com/)
+- [Node.js 24 LTS](https://nodejs.org/) (managed via `nvm`: run `nvm use 24` or `nvm install 24`)
+
+### Configuration
+Create a local `.env` file from the example:
+```bash
+cp .env.example .env
+```
+Update `.env` with your local development credentials.
+
+> [!IMPORTANT]
+> `.env` contains local environment secrets and is **never committed** to git. Conversely, `frontend/package-lock.json` **must be committed** to ensure reproducible frontend builds.
+
+### Running Services
+- **Daily development (Database only):**
+  ```bash
+  docker compose up -d db
+  ```
+- **Full stack (when application code is implemented):**
+  ```bash
+  docker compose --profile app up --build
+  ```
+
+### Service URLs & Ports
+- **Frontend UI:** [http://localhost:5173](http://localhost:5173) (Port 5173)
+- **API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs) (Port 8000)
+- **PostgreSQL Database:** `localhost:5433` (Host port 5433 maps to container port 5432)
+
+### Useful Docker Commands
+- View database logs:
+  ```bash
+  docker compose logs -f db
+  ```
+- Stop running containers:
+  ```bash
+  docker compose down
+  ```
+- Reset database and clear volumes:
+  ```bash
+  docker compose down -v
+  ```
+
+### Tooling & Code Quality Commands
+- **Backend Linting:**
+  ```bash
+  ruff check backend
+  ```
+- **Frontend Linting:**
+  ```bash
+  cd frontend && npm run lint
+  ```
+- **Frontend Formatting:**
+  ```bash
+  cd frontend && npm run format
+  ```

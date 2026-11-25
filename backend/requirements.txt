@@ -1,0 +1,24 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+fastapi==0.163.1
+uvicorn[standard]==0.54.0
+pydantic==2.14.3
+pydantic-settings==2.16.3
+sqlalchemy==2.1.8
+alembic==1.20.1
+psycopg[binary]==3.3.9
+pgvector==0.5.1
+pyjwt==2.15.1
+bcrypt==5.0.0
+python-multipart==0.0.33
+anthropic==2.8.0
+sentence-transformers==6.3.0
+torch==2.15.0+cpu
+pymupdf==2.1
+python-docx==1.2.0
+docxtpl==0.20.2
+openpyxl==3.1.5
+rapidfuzz==3.14.6
+matplotlib==3.11.2
+pytest==9.2.0
+httpx==0.28.1
+ruff==0.17.5
