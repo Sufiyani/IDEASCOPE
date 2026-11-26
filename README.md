@@ -21,7 +21,7 @@ The student then confirms their **Final Scope** (features, objectives, category,
 | Member | Name | Role in Codebase |
 |--------|------|-----------------|
 | **M1** | M Naqi Rahmani | AI layer, Readiness Report, Deploy |
-| **M2** | Sufiyaan Imran | Auth, Users, Worker, Docker, Core |
+| **M2** | Sufiyan Imran | Auth, Users, Worker, Docker, Core |
 | **M3** | Sarmad Arshad | Ingestion, Proposals, Quotas, Settings |
 
 > Full file-level ownership is in `CODEOWNERS`. One module = one owner. Changes to shared code (`core/`, shared models) require a PR reviewed by another member.
@@ -122,7 +122,7 @@ ideascope/
 
 ---
 
-### M2 — Sufiyaan Imran
+### M2 — Sufiyan Imran
 | Path | What it does |
 |------|-------------|
 | `backend/app/core/config.py` | All settings loaded from `.env` via pydantic-settings |
