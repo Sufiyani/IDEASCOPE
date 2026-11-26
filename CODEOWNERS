@@ -8,15 +8,15 @@
 # Shared code (core/, base models) = any change needs 2 reviewers.
 #
 # Members
-#   M1  M Naqi Rahmani   → @m-naqi-rahmani
-#   M2  Sufiyaan Imran   → @sufiyaan-imran
-#   M3  Sarmad Arshad    → @sarmad-arshad
+#   M1  M Naqi Rahmani   → @MuhammadNaqiRehmani111
+#   M2  Sufiyaan Imran   → @Sufiyani
+#   M3  Sarmad Arshad    → @sarmadarshad321
 # ─────────────────────────────────────────────────────────────────────────────
 
 
 # ── Repo-wide fallback ───────────────────────────────────────────────────────
 # Any file not matched below needs at least one of the three to review.
-*                                               @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+*                                               @MuhammadNaqiRehmani111 @Sufiyani @sarmadarshad321
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -24,19 +24,19 @@
 # AI layer · Readiness Report · Deploy
 # ─────────────────────────────────────────────────────────────────────────────
 
-backend/app/ai/                                 @m-naqi-rahmani
-backend/app/routers/reports.py                  @m-naqi-rahmani
-backend/app/services/report_service.py          @m-naqi-rahmani
-backend/app/models/analysis.py                  @m-naqi-rahmani
-backend/app/models/similar_match.py             @m-naqi-rahmani
-backend/app/models/suggestion.py                @m-naqi-rahmani
-backend/app/models/past_project_feature.py      @m-naqi-rahmani
-backend/app/models/llm_usage.py                 @m-naqi-rahmani
-backend/app/schemas/reports.py                  @m-naqi-rahmani
-backend/tests/test_scoring.py                   @m-naqi-rahmani
-deploy/                                         @m-naqi-rahmani
-frontend/src/pages/student/ReadinessReport.jsx  @m-naqi-rahmani
-frontend/src/pages/student/Suggestions.jsx      @m-naqi-rahmani
+backend/app/ai/                                 @MuhammadNaqiRehmani111
+backend/app/routers/reports.py                  @MuhammadNaqiRehmani111
+backend/app/services/report_service.py          @MuhammadNaqiRehmani111
+backend/app/models/analysis.py                  @MuhammadNaqiRehmani111
+backend/app/models/similar_match.py             @MuhammadNaqiRehmani111
+backend/app/models/suggestion.py                @MuhammadNaqiRehmani111
+backend/app/models/past_project_feature.py      @MuhammadNaqiRehmani111
+backend/app/models/llm_usage.py                 @MuhammadNaqiRehmani111
+backend/app/schemas/reports.py                  @MuhammadNaqiRehmani111
+backend/tests/test_scoring.py                   @MuhammadNaqiRehmani111
+deploy/                                         @MuhammadNaqiRehmani111
+frontend/src/pages/student/ReadinessReport.jsx  @MuhammadNaqiRehmani111
+frontend/src/pages/student/Suggestions.jsx      @MuhammadNaqiRehmani111
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -44,50 +44,50 @@ frontend/src/pages/student/Suggestions.jsx      @m-naqi-rahmani
 # Auth · Users · Groups · Worker · Core · Docker · Alembic
 # ─────────────────────────────────────────────────────────────────────────────
 
-backend/app/core/                               @sufiyaan-imran
-backend/app/worker/                             @sufiyaan-imran
-backend/app/main.py                             @sufiyaan-imran
-backend/alembic/                                @sufiyaan-imran
-backend/alembic.ini                             @sufiyaan-imran
-backend/scripts/                                @sufiyaan-imran
-backend/Dockerfile                              @sufiyaan-imran
-backend/requirements.txt                        @sufiyaan-imran
-docker-compose.yml                              @sufiyaan-imran
-.env.example                                    @sufiyaan-imran
+backend/app/core/                               @Sufiyani
+backend/app/worker/                             @Sufiyani
+backend/app/main.py                             @Sufiyani
+backend/alembic/                                @Sufiyani
+backend/alembic.ini                             @Sufiyani
+backend/scripts/                                @Sufiyani
+backend/Dockerfile                              @Sufiyani
+backend/requirements.txt                        @Sufiyani
+docker-compose.yml                              @Sufiyani
+.env.example                                    @Sufiyani
 
-backend/app/routers/auth.py                     @sufiyaan-imran
-backend/app/routers/users.py                    @sufiyaan-imran
-backend/app/routers/groups.py                   @sufiyaan-imran
-backend/app/routers/jobs.py                     @sufiyaan-imran
-backend/app/routers/health.py                   @sufiyaan-imran
+backend/app/routers/auth.py                     @Sufiyani
+backend/app/routers/users.py                    @Sufiyani
+backend/app/routers/groups.py                   @Sufiyani
+backend/app/routers/jobs.py                     @Sufiyani
+backend/app/routers/health.py                   @Sufiyani
 
-backend/app/services/auth_service.py            @sufiyaan-imran
-backend/app/services/user_service.py            @sufiyaan-imran
-backend/app/services/group_service.py           @sufiyaan-imran
+backend/app/services/auth_service.py            @Sufiyani
+backend/app/services/user_service.py            @Sufiyani
+backend/app/services/group_service.py           @Sufiyani
 
-backend/app/models/user.py                      @sufiyaan-imran
-backend/app/models/refresh_token.py             @sufiyaan-imran
-backend/app/models/group.py                     @sufiyaan-imran
-backend/app/models/category.py                  @sufiyaan-imran
-backend/app/models/sdg.py                       @sufiyaan-imran
-backend/app/models/audit_log.py                 @sufiyaan-imran
-backend/app/models/job.py                       @sufiyaan-imran
+backend/app/models/user.py                      @Sufiyani
+backend/app/models/refresh_token.py             @Sufiyani
+backend/app/models/group.py                     @Sufiyani
+backend/app/models/category.py                  @Sufiyani
+backend/app/models/sdg.py                       @Sufiyani
+backend/app/models/audit_log.py                 @Sufiyani
+backend/app/models/job.py                       @Sufiyani
 
-backend/app/schemas/auth.py                     @sufiyaan-imran
-backend/app/schemas/users.py                    @sufiyaan-imran
-backend/app/schemas/groups.py                   @sufiyaan-imran
-backend/app/schemas/jobs.py                     @sufiyaan-imran
+backend/app/schemas/auth.py                     @Sufiyani
+backend/app/schemas/users.py                    @Sufiyani
+backend/app/schemas/groups.py                   @Sufiyani
+backend/app/schemas/jobs.py                     @Sufiyani
 
-backend/tests/test_security.py                  @sufiyaan-imran
-backend/tests/test_roles.py                     @sufiyaan-imran
+backend/tests/test_security.py                  @Sufiyani
+backend/tests/test_roles.py                     @Sufiyani
 
-frontend/src/auth/                              @sufiyaan-imran
-frontend/src/pages/auth/Login.jsx               @sufiyaan-imran
-frontend/src/pages/auth/ChangePassword.jsx      @sufiyaan-imran
-frontend/src/pages/layout/DashboardFrame.jsx    @sufiyaan-imran
-frontend/src/pages/admin/UserManagement.jsx     @sufiyaan-imran
-frontend/src/pages/student/CreateJoinGroup.jsx  @sufiyaan-imran
-frontend/src/routes/                            @sufiyaan-imran
+frontend/src/auth/                              @Sufiyani
+frontend/src/pages/auth/Login.jsx               @Sufiyani
+frontend/src/pages/auth/ChangePassword.jsx      @Sufiyani
+frontend/src/pages/layout/DashboardFrame.jsx    @Sufiyani
+frontend/src/pages/admin/UserManagement.jsx     @Sufiyani
+frontend/src/pages/student/CreateJoinGroup.jsx  @Sufiyani
+frontend/src/routes/                            @Sufiyani
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -95,49 +95,49 @@ frontend/src/routes/                            @sufiyaan-imran
 # Ingestion · Proposals · Abstracts · Quotas · Settings
 # ─────────────────────────────────────────────────────────────────────────────
 
-backend/app/ingestion/                          @sarmad-arshad
+backend/app/ingestion/                          @sarmadarshad321
 
-backend/app/routers/abstracts.py                @sarmad-arshad
-backend/app/routers/proposals.py                @sarmad-arshad
-backend/app/routers/quotas.py                   @sarmad-arshad
-backend/app/routers/settings.py                 @sarmad-arshad
+backend/app/routers/abstracts.py                @sarmadarshad321
+backend/app/routers/proposals.py                @sarmadarshad321
+backend/app/routers/quotas.py                   @sarmadarshad321
+backend/app/routers/settings.py                 @sarmadarshad321
 
-backend/app/services/abstract_service.py        @sarmad-arshad
-backend/app/services/proposal_service.py        @sarmad-arshad
-backend/app/services/quota_service.py           @sarmad-arshad
-backend/app/services/settings_service.py        @sarmad-arshad
+backend/app/services/abstract_service.py        @sarmadarshad321
+backend/app/services/proposal_service.py        @sarmadarshad321
+backend/app/services/quota_service.py           @sarmadarshad321
+backend/app/services/settings_service.py        @sarmadarshad321
 
-backend/app/models/import_batch.py              @sarmad-arshad
-backend/app/models/past_project.py              @sarmad-arshad
-backend/app/models/proposal.py                  @sarmad-arshad
-backend/app/models/document.py                  @sarmad-arshad
-backend/app/models/final_scope.py               @sarmad-arshad
-backend/app/models/quota.py                     @sarmad-arshad
-backend/app/models/setting.py                   @sarmad-arshad
+backend/app/models/import_batch.py              @sarmadarshad321
+backend/app/models/past_project.py              @sarmadarshad321
+backend/app/models/proposal.py                  @sarmadarshad321
+backend/app/models/document.py                  @sarmadarshad321
+backend/app/models/final_scope.py               @sarmadarshad321
+backend/app/models/quota.py                     @sarmadarshad321
+backend/app/models/setting.py                   @sarmadarshad321
 
-backend/app/schemas/abstracts.py                @sarmad-arshad
-backend/app/schemas/proposals.py                @sarmad-arshad
-backend/app/schemas/quotas.py                   @sarmad-arshad
-backend/app/schemas/settings.py                 @sarmad-arshad
+backend/app/schemas/abstracts.py                @sarmadarshad321
+backend/app/schemas/proposals.py                @sarmadarshad321
+backend/app/schemas/quotas.py                   @sarmadarshad321
+backend/app/schemas/settings.py                 @sarmadarshad321
 
-backend/tests/test_quota.py                     @sarmad-arshad
-backend/tests/test_ingestion.py                 @sarmad-arshad
+backend/tests/test_quota.py                     @sarmadarshad321
+backend/tests/test_ingestion.py                 @sarmadarshad321
 
-frontend/src/pages/admin/ExcelUpload.jsx        @sarmad-arshad
-frontend/src/pages/admin/PastProjects.jsx       @sarmad-arshad
-frontend/src/pages/admin/PastProjectDetail.jsx  @sarmad-arshad
-frontend/src/pages/admin/Quotas.jsx             @sarmad-arshad
-frontend/src/pages/admin/Settings.jsx           @sarmad-arshad
-frontend/src/pages/student/IdeaUpload.jsx       @sarmad-arshad
-frontend/src/pages/student/FinalScope.jsx       @sarmad-arshad
+frontend/src/pages/admin/ExcelUpload.jsx        @sarmadarshad321
+frontend/src/pages/admin/PastProjects.jsx       @sarmadarshad321
+frontend/src/pages/admin/PastProjectDetail.jsx  @sarmadarshad321
+frontend/src/pages/admin/Quotas.jsx             @sarmadarshad321
+frontend/src/pages/admin/Settings.jsx           @sarmadarshad321
+frontend/src/pages/student/IdeaUpload.jsx       @sarmadarshad321
+frontend/src/pages/student/FinalScope.jsx       @sarmadarshad321
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Shared — requires review from 2 members before merge
 # ─────────────────────────────────────────────────────────────────────────────
 
-backend/app/models/base.py                      @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
-backend/app/models/__init__.py                  @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
-backend/app/schemas/contracts.py                @m-naqi-rahmani @sarmad-arshad
-docs/                                           @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
-postman/                                        @m-naqi-rahmani @sufiyaan-imran @sarmad-arshad
+backend/app/models/base.py                      @MuhammadNaqiRehmani111 @Sufiyani @sarmadarshad321
+backend/app/models/__init__.py                  @MuhammadNaqiRehmani111 @Sufiyani @sarmadarshad321
+backend/app/schemas/contracts.py                @MuhammadNaqiRehmani111 @sarmadarshad321
+docs/                                           @MuhammadNaqiRehmani111 @Sufiyani @sarmadarshad321
+postman/                                        @MuhammadNaqiRehmani111 @Sufiyani @sarmadarshad321

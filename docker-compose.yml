@@ -16,9 +16,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # remove the profiles lines once backend/app/main.py and the frontend pages exist
   api:
-    profiles: ["app"]
     build: ./backend
     env_file: .env
     ports:
@@ -29,23 +27,22 @@ services:
     volumes:
       - ./backend/app:/code/app
       - uploads_data:/data/uploads
+      - hf_cache:/root/.cache/huggingface
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # remove the profiles lines once backend/app/main.py and the frontend pages exist
   worker:
-    profiles: ["app"]
     build: ./backend
     env_file: .env
     depends_on:
       db:
         condition: service_healthy
     volumes:
+      - ./backend/app:/code/app
       - uploads_data:/data/uploads
+      - hf_cache:/root/.cache/huggingface
     command: python -m app.worker.runner
 
-  # remove the profiles lines once backend/app/main.py and the frontend pages exist
   frontend:
-    profiles: ["app"]
     build: ./frontend
     ports:
       - "5173:5173"
@@ -59,3 +56,4 @@ services:
 volumes:
   postgres_data:
   uploads_data:
+  hf_cache:
