@@ -8,7 +8,6 @@ No `from __future__ import annotations` per rules.
 
 import re
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -60,15 +59,15 @@ class UserOut(BaseModel):
     id: int
     username: str
     full_name: str
-    email: Optional[str] = None
-    roll_no: Optional[str] = None
+    email: str | None = None
+    roll_no: str | None = None
     role: str
     is_main_admin: bool
     is_active: bool
     must_change_password: bool
-    locked_until: Optional[datetime] = None
-    last_login_at: Optional[datetime] = None
-    created_by: Optional[int] = None
+    locked_until: datetime | None = None
+    last_login_at: datetime | None = None
+    created_by: int | None = None
     created_at: datetime
     updated_at: datetime
 

@@ -12,10 +12,11 @@ from __future__ import annotations
 
 import sys
 
-from alembic import command
 from alembic.config import Config
 from sqlalchemy import create_engine, make_url, text
 from sqlalchemy.exc import OperationalError
+
+from alembic import command
 
 
 def main() -> None:
@@ -28,14 +29,18 @@ def main() -> None:
     url = make_url(settings.database_url)
     host = url.host or ""
     if host not in ("db", "localhost", "127.0.0.1"):
-        print(f"ERROR: Refusing to reset database on host '{host}'. Only db/localhost/127.0.0.1 allowed.")
+        print(
+            f"ERROR: Refusing to reset database on host '{host}'. Only db/localhost/127.0.0.1 allowed."
+        )
         sys.exit(1)
 
     print(f"=== Resetting database on {host} ===")
 
     # Connect to the postgres maintenance DB to drop/create the target DB
     maint_url = url.set(database="postgres")
-    maint_engine = create_engine(maint_url.render_as_string(hide_password=False), isolation_level="AUTOCOMMIT")
+    maint_engine = create_engine(
+        maint_url.render_as_string(hide_password=False), isolation_level="AUTOCOMMIT"
+    )
 
     db_name = url.database
     try:

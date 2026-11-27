@@ -46,6 +46,4 @@ def change_password(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user_any),
 ):
-    return auth_service.change_password(
-        db, current_user, body.current_password, body.new_password
-    )
+    return auth_service.change_password(db, current_user, body.current_password, body.new_password)

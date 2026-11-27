@@ -4,16 +4,15 @@ Owner: Member 2 (Sufiyaan Imran)
 """
 
 import re
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from app.schemas.auth import PASSWORD_MAX_BYTES, PASSWORD_MIN_CHARS, UserOut  # noqa: F401
+from app.schemas.auth import PASSWORD_MAX_BYTES, PASSWORD_MIN_CHARS, UserOut
 
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
-def _validate_email(v: Optional[str]) -> Optional[str]:
+def _validate_email(v: str | None) -> str | None:
     if v is None:
         return None
     v = v.strip().lower()
@@ -25,10 +24,10 @@ def _validate_email(v: Optional[str]) -> Optional[str]:
 class UserCreate(BaseModel):
     full_name: str
     role: str = "student"
-    roll_no: Optional[str] = None
-    username: Optional[str] = None
-    email: Optional[str] = None
-    password: Optional[str] = None
+    roll_no: str | None = None
+    username: str | None = None
+    email: str | None = None
+    password: str | None = None
 
     @field_validator("full_name", mode="before")
     @classmethod
@@ -44,7 +43,7 @@ class UserCreate(BaseModel):
 
     @field_validator("roll_no", mode="before")
     @classmethod
-    def normalise_roll_no(cls, v: Optional[str]) -> Optional[str]:
+    def normalise_roll_no(cls, v: str | None) -> str | None:
         if v is None:
             return None
         v = v.strip().upper()
@@ -52,7 +51,7 @@ class UserCreate(BaseModel):
 
     @field_validator("username", mode="before")
     @classmethod
-    def normalise_username(cls, v: Optional[str]) -> Optional[str]:
+    def normalise_username(cls, v: str | None) -> str | None:
         if v is None:
             return None
         v = v.strip().lower()
@@ -60,12 +59,12 @@ class UserCreate(BaseModel):
 
     @field_validator("email", mode="before")
     @classmethod
-    def normalise_email(cls, v: Optional[str]) -> Optional[str]:
+    def normalise_email(cls, v: str | None) -> str | None:
         return _validate_email(v)
 
     @field_validator("password", mode="after")
     @classmethod
-    def validate_password(cls, v: Optional[str]) -> Optional[str]:
+    def validate_password(cls, v: str | None) -> str | None:
         if v is None:
             return None
         if len(v) < PASSWORD_MIN_CHARS:
@@ -76,27 +75,27 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    full_name: Optional[str] = None
-    email: Optional[str] = None
-    roll_no: Optional[str] = None
+    full_name: str | None = None
+    email: str | None = None
+    roll_no: str | None = None
 
     @field_validator("full_name", mode="before")
     @classmethod
-    def strip_full_name(cls, v: Optional[str]) -> Optional[str]:
+    def strip_full_name(cls, v: str | None) -> str | None:
         if v is None:
             return None
         return v.strip() or None
 
     @field_validator("roll_no", mode="before")
     @classmethod
-    def normalise_roll_no(cls, v: Optional[str]) -> Optional[str]:
+    def normalise_roll_no(cls, v: str | None) -> str | None:
         if v is None:
             return None
         return v.strip().upper() or None
 
     @field_validator("email", mode="before")
     @classmethod
-    def normalise_email(cls, v: Optional[str]) -> Optional[str]:
+    def normalise_email(cls, v: str | None) -> str | None:
         return _validate_email(v)
 
 
@@ -126,4 +125,4 @@ class UserCreateResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     user: UserOut
-    temporary_password: Optional[str] = None
+    temporary_password: str | None = None

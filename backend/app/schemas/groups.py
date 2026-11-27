@@ -5,8 +5,6 @@ Owner: Member 2 (Sufiyaan Imran)
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, ConfigDict
 
 
@@ -15,7 +13,7 @@ class GroupCreate(BaseModel):
 
 
 class AddMemberRequest(BaseModel):
-    user_id: Optional[int] = None
+    user_id: int | None = None
 
 
 class MemberOut(BaseModel):
@@ -24,8 +22,8 @@ class MemberOut(BaseModel):
     user_id: int
     full_name: str
     username: str
-    roll_no: Optional[str]
-    email: Optional[str]
+    roll_no: str | None
+    email: str | None
     joined_at: str
     is_leader: bool
 

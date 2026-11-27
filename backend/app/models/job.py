@@ -11,7 +11,7 @@ No payload column – target_id references the entity the job works on.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy import (
     BigInteger,
@@ -52,13 +52,13 @@ class Job(Base):
     status: Mapped[str] = mapped_column(Text, nullable=False, default="queued")
     progress: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0)
     attempts: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0)
-    error: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    result: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
-    created_by: Mapped[Optional[int]] = mapped_column(
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    result: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    created_by: Mapped[int | None] = mapped_column(
         BigInteger, ForeignKey("users.id"), nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
-    started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
-    finished_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

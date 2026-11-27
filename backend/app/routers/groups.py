@@ -3,8 +3,6 @@ IdeaScope – Group management router.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-from typing import Optional
-
 from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 
@@ -56,7 +54,7 @@ def remove_member(
 
 @router.get("")
 def list_groups(
-    q: Optional[str] = Query(None),
+    q: str | None = Query(None),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),

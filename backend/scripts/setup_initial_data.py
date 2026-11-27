@@ -14,8 +14,8 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.database import SessionLocal
-from app.core.seed_data import CATEGORY_NAMES, SDG_NAMES
 from app.core.security import hash_password
+from app.core.seed_data import CATEGORY_NAMES, SDG_NAMES
 from app.models.category import Category
 from app.models.sdg import SDG
 from app.models.user import User
@@ -56,7 +56,7 @@ def create_main_admin(db: Session) -> None:
 
     from sqlalchemy import select
 
-    existing = db.scalar(select(User).where(User.is_main_admin == True))  # noqa: E712
+    existing = db.scalar(select(User).where(User.is_main_admin == True))
     if existing:
         print(f"  [exists]  main admin: {existing.username} ({existing.email})")
         return

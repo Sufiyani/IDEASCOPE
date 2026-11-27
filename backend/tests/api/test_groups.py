@@ -115,7 +115,15 @@ def test_leader_transfer_on_leave(client, student_token, admin_token, student_us
     s2_id = s2["user"]["id"]
     s2_pass = s2["temporary_password"]
     s2_login = client.post("/auth/login", json={"username": "2023f-bse-010", "password": s2_pass})
-    s2_token = s2_login.json()["access_token"]
+    s2_token_tmp = s2_login.json()["access_token"]
+
+    # s2 must change password first
+    cp = client.post(
+        "/auth/change-password",
+        json={"current_password": s2_pass, "new_password": "Student99!"},
+        headers=_auth(s2_token_tmp),
+    )
+    s2_token = cp.json()["access_token"]
 
     # Leader adds s2
     client.post(

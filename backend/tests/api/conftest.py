@@ -1,5 +1,5 @@
 """
-IdeaScope – pytest configuration and fixtures.
+IdeaScope – pytest configuration and fixtures for API (DB-dependent) tests.
 Owner: Member 2 (Sufiyaan Imran)
 
 Uses a SEPARATE database <POSTGRES_DB>_test so the dev DB is never touched.
@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import pytest
 from alembic.config import Config
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, make_url, text
 from sqlalchemy.orm import sessionmaker
 
@@ -24,7 +25,8 @@ from scripts.setup_initial_data import seed_reference_data
 
 def _test_url() -> str:
     base = make_url(settings.database_url)
-    return str(base.set(database=base.database + "_test"))
+    test_db_name = base.database + "_test"
+    return base.set(database=test_db_name).render_as_string(hide_password=False)
 
 
 TEST_DB_URL = _test_url()
@@ -39,11 +41,10 @@ _TestSession = None
 def setup_test_database():
     global _test_engine, _TestSession
 
-    base_url = make_url(settings.database_url)
-    maint_url = str(base_url.set(database="postgres"))
-    test_db = base_url.database + "_test"
+    base = make_url(settings.database_url)
+    maint_url = base.set(database="postgres").render_as_string(hide_password=False)
+    test_db = base.database + "_test"
 
-    # Connect to postgres maintenance db to drop/create the test database
     maint_engine = create_engine(maint_url, isolation_level="AUTOCOMMIT")
     try:
         with maint_engine.connect() as conn:
@@ -56,7 +57,6 @@ def setup_test_database():
 
     # Run real Alembic migrations against the test DB
     alembic_cfg = Config("alembic.ini")
-    # Escape % as %% for ConfigParser
     escaped_url = TEST_DB_URL.replace("%", "%%")
     alembic_cfg.set_main_option("sqlalchemy.url", escaped_url)
     command.upgrade(alembic_cfg, "head")
@@ -76,7 +76,6 @@ def setup_test_database():
 def clean_db(setup_test_database):
     db = _TestSession()
     try:
-        # TRUNCATE all Member 2 tables (order respects FKs)
         db.execute(text("TRUNCATE audit_logs RESTART IDENTITY CASCADE"))
         db.execute(text("TRUNCATE group_members CASCADE"))
         db.execute(text("TRUNCATE groups RESTART IDENTITY CASCADE"))
@@ -120,9 +119,7 @@ def override_get_db(setup_test_database):
 
 @pytest.fixture
 def client():
-    from httpx import ASGITransport, Client
-
-    with Client(transport=ASGITransport(app=app), base_url="http://test") as c:
+    with TestClient(app) as c:
         yield c
 
 

@@ -9,7 +9,7 @@ Rows are NEVER updated or deleted (enforced by a PL/pgSQL trigger in migration 0
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, Index, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
@@ -27,13 +27,11 @@ class AuditLog(Base):
     )
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    actor_id: Mapped[Optional[int]] = mapped_column(
-        BigInteger, ForeignKey("users.id"), nullable=True
-    )
+    actor_id: Mapped[int | None] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=True)
     action: Mapped[str] = mapped_column(Text, nullable=False)
-    target_type: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    target_id: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
-    details: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+    target_type: Mapped[str | None] = mapped_column(Text, nullable=True)
+    target_id: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    details: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

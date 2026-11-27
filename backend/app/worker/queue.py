@@ -7,8 +7,6 @@ Members 1 and 3 import enqueue_job() to create background jobs.
 
 from __future__ import annotations
 
-from typing import Optional
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -20,7 +18,7 @@ def enqueue_job(
     db: Session,
     job_type: str,
     target_id: int,
-    created_by: Optional[int] = None,
+    created_by: int | None = None,
 ) -> Job:
     """
     Create a new Job with status 'queued' and flush it to the session.

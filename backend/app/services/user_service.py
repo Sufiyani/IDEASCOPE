@@ -104,12 +104,13 @@ def create_user(db: Session, data: dict, actor: User) -> dict:
         if not roll_no:
             raise HTTPException(status_code=400, detail="roll_no_required_for_student")
         username = roll_no.lower()
+        # Check roll_no uniqueness before anything else
+        _check_uniqueness(db, username=username, email=email, roll_no=roll_no)
     else:
         if not given_username:
             raise HTTPException(status_code=400, detail="username_required_for_admin")
         username = given_username
-
-    _check_uniqueness(db, username=username, email=email, roll_no=roll_no)
+        _check_uniqueness(db, username=username, email=email)
 
     temp_password = None
     if password is None:
