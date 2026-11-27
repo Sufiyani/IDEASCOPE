@@ -18,6 +18,7 @@ services:
 
   api:
     build: ./backend
+    restart: unless-stopped
     env_file: .env
     ports:
       - "8000:8000"
@@ -32,6 +33,7 @@ services:
 
   worker:
     build: ./backend
+    restart: unless-stopped
     env_file: .env
     depends_on:
       db:

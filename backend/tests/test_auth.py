@@ -3,8 +3,6 @@ Tests for auth endpoints.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-import pytest
-
 from app.core.constants import MAX_FAILED_LOGINS
 
 
@@ -13,7 +11,9 @@ def _auth(token):
 
 
 def test_login_success(client, student_user):
-    r = client.post("/auth/login", json={"username": student_user.username, "password": "Password1"})
+    r = client.post(
+        "/auth/login", json={"username": student_user.username, "password": "Password1"}
+    )
     assert r.status_code == 200
     data = r.json()
     assert "access_token" in data
@@ -132,6 +132,8 @@ def test_me(client, student_user, student_token):
 def test_inactive_user_cannot_login(client, db, student_user):
     student_user.is_active = False
     db.commit()
-    r = client.post("/auth/login", json={"username": student_user.username, "password": "Password1"})
+    r = client.post(
+        "/auth/login", json={"username": student_user.username, "password": "Password1"}
+    )
     assert r.status_code == 403
     assert r.json()["detail"] == "account_deactivated"

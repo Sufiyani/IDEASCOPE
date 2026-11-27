@@ -3,8 +3,6 @@ Tests for user management endpoints.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-import pytest
-
 
 def _auth(token):
     return {"Authorization": f"Bearer {token}"}

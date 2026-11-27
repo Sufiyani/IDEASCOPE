@@ -8,19 +8,19 @@ Uses a SEPARATE database <POSTGRES_DB>_test so the dev DB is never touched.
 from __future__ import annotations
 
 import pytest
-from alembic import command
 from alembic.config import Config
 from sqlalchemy import create_engine, make_url, text
 from sqlalchemy.orm import sessionmaker
 
+from alembic import command
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.security import generate_temp_password, hash_password
+from app.core.security import hash_password
 from app.main import app
 from scripts.setup_initial_data import seed_reference_data
 
-
 # ── Build test DB URL ─────────────────────────────────────────────────────────
+
 
 def _test_url() -> str:
     base = make_url(settings.database_url)
@@ -33,6 +33,7 @@ _TestSession = None
 
 
 # ── Session-scoped DB setup ───────────────────────────────────────────────────
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_database():
@@ -48,7 +49,7 @@ def setup_test_database():
         with maint_engine.connect() as conn:
             conn.execute(text(f'DROP DATABASE IF EXISTS "{test_db}" WITH (FORCE)'))
             conn.execute(text(f'CREATE DATABASE "{test_db}"'))
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         pytest.skip(f"Cannot connect to database: {e}")
     finally:
         maint_engine.dispose()
@@ -70,6 +71,7 @@ def setup_test_database():
 
 # ── Function-scoped: truncate tables and re-seed between tests ────────────────
 
+
 @pytest.fixture(autouse=True)
 def clean_db(setup_test_database):
     db = _TestSession()
@@ -88,6 +90,7 @@ def clean_db(setup_test_database):
 
 
 # ── Override get_db dependency ────────────────────────────────────────────────
+
 
 @pytest.fixture
 def db():
@@ -114,6 +117,7 @@ def override_get_db(setup_test_database):
 
 # ── HTTP test client ──────────────────────────────────────────────────────────
 
+
 @pytest.fixture
 def client():
     from httpx import ASGITransport, Client
@@ -124,18 +128,19 @@ def client():
 
 # ── User creation helpers ─────────────────────────────────────────────────────
 
+
 def _make_user(db, **kwargs):
     from app.models.user import User
 
-    defaults = dict(
-        username="testuser",
-        full_name="Test User",
-        password_hash=hash_password("Password1"),
-        role="student",
-        is_main_admin=False,
-        is_active=True,
-        must_change_password=False,
-    )
+    defaults = {
+        "username": "testuser",
+        "full_name": "Test User",
+        "password_hash": hash_password("Password1"),
+        "role": "student",
+        "is_main_admin": False,
+        "is_active": True,
+        "must_change_password": False,
+    }
     defaults.update(kwargs)
     u = User(**defaults)
     db.add(u)

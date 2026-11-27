@@ -4,9 +4,11 @@ Owner: Member 2 (Sufiyaan Imran)
 
 Reads all configuration from environment variables / .env file.
 No hard-coded secrets anywhere in this file.
+Startup validation: missing DATABASE_URL or weak JWT_SECRET cause a
+clear error message instead of a silent 500 later.
 """
 
-from __future__ import annotations
+import sys
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -26,7 +28,7 @@ class Settings(BaseSettings):
     database_url: str = ""
 
     # ── JWT ───────────────────────────────────────────────────────────────────
-    jwt_secret: str = "changeme-dev-secret"
+    jwt_secret: str = ""
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 30
     refresh_token_days: int = 7
@@ -53,4 +55,30 @@ class Settings(BaseSettings):
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
 
+def _validate_settings(s: Settings) -> None:
+    """Fail fast with a clear message if critical settings are missing."""
+    errors = []
+
+    if not s.database_url:
+        errors.append(
+            "DATABASE_URL is not set. "
+            "Add it to .env, e.g.: "
+            "DATABASE_URL=postgresql+psycopg://user:pass@db:5432/ideascope"
+        )
+
+    if not s.jwt_secret or len(s.jwt_secret) < 32:
+        errors.append(
+            "JWT_SECRET is missing or too short (minimum 32 characters). "
+            'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
+        )
+
+    if errors:
+        print("\n=== IdeaScope startup error ===", flush=True)
+        for e in errors:
+            print(f"  ERROR: {e}", flush=True)
+        print("================================\n", flush=True)
+        sys.exit(1)
+
+
 settings = Settings()
+_validate_settings(settings)

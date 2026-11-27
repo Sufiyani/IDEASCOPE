@@ -11,12 +11,17 @@ import logging
 import signal
 import time
 import traceback
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.constants import JOB_STATUS_DONE, JOB_STATUS_FAILED, JOB_STATUS_RUNNING, MAX_JOB_ATTEMPTS
+from app.core.constants import (
+    JOB_STATUS_DONE,
+    JOB_STATUS_FAILED,
+    JOB_STATUS_RUNNING,
+    MAX_JOB_ATTEMPTS,
+)
 from app.core.database import SessionLocal
 from app.models.job import Job
 from app.worker.registry import get_handler
@@ -29,7 +34,7 @@ _running = True
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _handle_sigterm(signum, frame):
@@ -79,7 +84,7 @@ def _claim_and_run(db: Session) -> bool:
         job.finished_at = _now()
         db.commit()
         logger.info("Job %d done", job.id)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         db.rollback()
         # Re-fetch after rollback
         job = db.get(Job, job.id)
@@ -105,6 +110,7 @@ def _claim_and_run(db: Session) -> bool:
 def run_worker() -> None:
     logger.info("IdeaScope worker started (poll every %ds)", POLL_INTERVAL)
     while _running:
+        processed = False
         db = SessionLocal()
         try:
             processed = _claim_and_run(db)

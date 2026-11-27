@@ -4,10 +4,10 @@ Owner: Member 2 (Sufiyaan Imran)
 """
 
 import pytest
+from fastapi import HTTPException
 
 from app.core.constants import JOB_STATUS_DONE, JOB_STATUS_FAILED, MAX_JOB_ATTEMPTS
 from app.worker.queue import enqueue_job
-from app.worker.registry import get_handler
 from app.worker.runner import _claim_and_run
 
 
@@ -24,7 +24,7 @@ def test_enqueue_job(db, student_user):
 
 
 def test_invalid_job_type(db):
-    with pytest.raises(Exception):
+    with pytest.raises(HTTPException):
         enqueue_job(db, "not_a_real_type", target_id=1)
 
 

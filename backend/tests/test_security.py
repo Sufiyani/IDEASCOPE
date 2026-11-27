@@ -3,10 +3,9 @@ Tests for core/security.py – hashing, JWT, token helpers.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-import time
+from datetime import UTC
 
 import jwt
-import pytest
 
 from app.core.config import settings
 from app.core.security import (
@@ -57,12 +56,12 @@ def test_refresh_token_has_jti():
 
 
 def test_expired_token_returns_none():
-    from datetime import datetime, timedelta, timezone
+    from datetime import datetime, timedelta
 
     payload = {
         "sub": "1",
         "type": "access",
-        "exp": datetime.now(timezone.utc) - timedelta(seconds=1),
+        "exp": datetime.now(UTC) - timedelta(seconds=1),
     }
     token = jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
     assert decode_token(token) is None
