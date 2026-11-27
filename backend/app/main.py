@@ -1,39 +1,30 @@
-import os
+"""
+IdeaScope – FastAPI application entry point.
+Owner: Member 2 (Sufiyaan Imran)
+"""
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
 
-from app.core.database import get_db
+from app.core.config import settings
+from app.routers import auth, groups, health, jobs, users
 
 app = FastAPI(title="IdeaScope API", version="1.0.0")
 
-# CORS Configuration
-cors_origins_raw = os.getenv("CORS_ORIGINS", "http://localhost:5173")
-cors_origins = [origin.strip() for origin in cors_origins_raw.split(",") if origin.strip()]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+app.include_router(health.router)
+app.include_router(auth.router, prefix="/auth")
+app.include_router(users.router, prefix="/users")
+app.include_router(groups.router, prefix="/groups")
+app.include_router(jobs.router, prefix="/jobs")
 
-@app.get("/health", tags=["Health"])
-def health_check(db: Session = Depends(get_db)):
-    """Health check endpoint that verifies database connectivity."""
-    try:
-        db.execute(text("SELECT 1"))
-        return {
-            "status": "healthy",
-            "database": "connected",
-        }
-    except SQLAlchemyError:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="database unavailable",
-        )
+# Member 3 routers: add include_router lines here
+
+# Member 1 routers: add include_router lines here
