@@ -5,7 +5,7 @@ Owner: Member 2 (Sufiyaan Imran)
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import HTTPException, status
 from sqlalchemy import select
@@ -25,7 +25,7 @@ from app.models.user import User
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _build_token_response(db: Session, user: User) -> dict:
@@ -87,9 +87,7 @@ def login(db: Session, username: str, password: str) -> dict:
                 user.locked_until = _now() + timedelta(minutes=LOCK_MINUTES)
                 user.failed_logins = 0
             db.commit()
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_credentials"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_credentials")
 
     # Correct password but still locked (edge: set while counting)
     if user.locked_until and user.locked_until > _now():
@@ -148,12 +146,12 @@ def logout(db: Session, raw_token: str) -> None:
         db.commit()
 
 
-def change_password(
-    db: Session, user: User, current_password: str, new_password: str
-) -> dict:
+def change_password(db: Session, user: User, current_password: str, new_password: str) -> dict:
     """Verify current password, set new, revoke all tokens, return new pair."""
     if not verify_password(current_password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="wrong_current_password")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="wrong_current_password"
+        )
 
     if verify_password(new_password, user.password_hash):
         raise HTTPException(

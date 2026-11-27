@@ -5,10 +5,9 @@ Owner: Member 2 (Sufiyaan Imran)
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
@@ -16,22 +15,28 @@ from app.core.audit import write_audit
 from app.core.constants import ROLE_ADMIN, ROLE_STUDENT
 from app.core.security import generate_temp_password, hash_password
 from app.models.group import GroupMember
-from app.models.refresh_token import RefreshToken
 from app.models.user import User
 from app.services.auth_service import _revoke_all_tokens, _user_to_dict
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _check_uniqueness(
     db: Session,
-    username: Optional[str] = None,
-    email: Optional[str] = None,
-    roll_no: Optional[str] = None,
-    exclude_id: Optional[int] = None,
+    username: str | None = None,
+    email: str | None = None,
+    roll_no: str | None = None,
+    exclude_id: int | None = None,
 ) -> None:
+    if roll_no:
+        q = select(User).where(User.roll_no == roll_no)
+        if exclude_id:
+            q = q.where(User.id != exclude_id)
+        if db.scalar(q):
+            raise HTTPException(status_code=409, detail="roll_no_already_exists")
+
     if username:
         q = select(User).where(User.username == username)
         if exclude_id:
@@ -46,19 +51,12 @@ def _check_uniqueness(
         if db.scalar(q):
             raise HTTPException(status_code=409, detail="email_already_exists")
 
-    if roll_no:
-        q = select(User).where(User.roll_no == roll_no)
-        if exclude_id:
-            q = q.where(User.id != exclude_id)
-        if db.scalar(q):
-            raise HTTPException(status_code=409, detail="roll_no_already_exists")
-
 
 def list_users(
     db: Session,
-    role: Optional[str],
-    is_active: Optional[bool],
-    q: Optional[str],
+    role: str | None,
+    is_active: bool | None,
+    q: str | None,
     page: int,
     page_size: int,
 ) -> dict:
@@ -78,9 +76,7 @@ def list_users(
             )
         )
     total = db.scalar(select(func.count()).select_from(stmt.subquery()))
-    users = db.scalars(
-        stmt.order_by(User.id).offset((page - 1) * page_size).limit(page_size)
-    ).all()
+    users = db.scalars(stmt.order_by(User.id).offset((page - 1) * page_size).limit(page_size)).all()
     return {
         "items": [_user_to_dict(u) for u in users],
         "total": total or 0,
@@ -108,12 +104,13 @@ def create_user(db: Session, data: dict, actor: User) -> dict:
         if not roll_no:
             raise HTTPException(status_code=400, detail="roll_no_required_for_student")
         username = roll_no.lower()
+        # Check roll_no uniqueness before anything else
+        _check_uniqueness(db, username=username, email=email, roll_no=roll_no)
     else:
         if not given_username:
             raise HTTPException(status_code=400, detail="username_required_for_admin")
         username = given_username
-
-    _check_uniqueness(db, username=username, email=email, roll_no=roll_no)
+        _check_uniqueness(db, username=username, email=email)
 
     temp_password = None
     if password is None:
@@ -188,14 +185,17 @@ def change_role(db: Session, user_id: int, new_role: str, actor: User) -> dict:
         if gm:
             raise HTTPException(status_code=409, detail="user_in_group")
 
-    if new_role == ROLE_STUDENT and user.role == ROLE_ADMIN:
-        if not user.roll_no:
-            raise HTTPException(status_code=409, detail="roll_no_required")
+    if new_role == ROLE_STUDENT and user.role == ROLE_ADMIN and not user.roll_no:
+        raise HTTPException(status_code=409, detail="roll_no_required")
 
     old_role = user.role
     user.role = new_role
     write_audit(
-        db, actor.id, "user.role_changed", "User", user_id,
+        db,
+        actor.id,
+        "user.role_changed",
+        "User",
+        user_id,
         {"old_role": old_role, "new_role": new_role},
     )
     db.commit()

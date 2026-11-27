@@ -3,14 +3,13 @@ Tests for role-based access control.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-import pytest
-
 
 def _auth(token):
     return {"Authorization": f"Bearer {token}"}
 
 
 # ── Deactivated user is blocked ───────────────────────────────────────────────
+
 
 def test_deactivated_user_blocked(client, db, student_user, student_token):
     student_user.is_active = False
@@ -20,6 +19,7 @@ def test_deactivated_user_blocked(client, db, student_user, student_token):
 
 
 # ── must_change_password blocks everything except exempted endpoints ──────────
+
 
 def test_must_change_password_blocks_users(client, db, admin_user, admin_token):
     admin_user.must_change_password = True
@@ -51,7 +51,9 @@ def test_must_change_password_allows_logout(client, db, student_user, student_to
     student_user.must_change_password = True
     db.commit()
     # We need a refresh token
-    login = client.post("/auth/login", json={"username": student_user.username, "password": "Password1"})
+    login = client.post(
+        "/auth/login", json={"username": student_user.username, "password": "Password1"}
+    )
     refresh = login.json()["refresh_token"]
     r = client.post(
         "/auth/logout",
@@ -62,6 +64,7 @@ def test_must_change_password_allows_logout(client, db, student_user, student_to
 
 
 # ── Student cannot access admin endpoints ────────────────────────────────────
+
 
 def test_student_cannot_list_users(client, student_token):
     r = client.get("/users", headers=_auth(student_token))
@@ -79,6 +82,7 @@ def test_student_cannot_set_status(client, student_token, student_user):
 
 # ── Normal admin cannot change user status (requires main admin) ──────────────
 
+
 def test_admin_cannot_set_status(client, admin_token, student_user):
     r = client.patch(
         f"/users/{student_user.id}/status",
@@ -90,6 +94,7 @@ def test_admin_cannot_set_status(client, admin_token, student_user):
 
 # ── Main admin CAN change status ──────────────────────────────────────────────
 
+
 def test_main_admin_can_set_status(client, main_admin_token, student_user):
     r = client.patch(
         f"/users/{student_user.id}/status",
@@ -100,6 +105,7 @@ def test_main_admin_can_set_status(client, main_admin_token, student_user):
 
 
 # ── No token → 401 ───────────────────────────────────────────────────────────
+
 
 def test_no_token_returns_401(client):
     r = client.get("/users")

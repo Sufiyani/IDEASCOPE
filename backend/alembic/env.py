@@ -11,11 +11,11 @@ from __future__ import annotations
 
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.core.config import settings
 import app.models  # noqa: F401 – ensures all metadata is loaded
+from alembic import context
+from app.core.config import settings
 
 # this is the Alembic Config object
 config = context.config

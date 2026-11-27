@@ -17,9 +17,7 @@ from app.models.base import Base
 class SDG(Base):
     __tablename__ = "sdgs"
 
-    __table_args__ = (
-        UniqueConstraint("name", name="uq_sdgs_name"),
-    )
+    __table_args__ = (UniqueConstraint("name", name="uq_sdgs_name"),)
 
     number: Mapped[int] = mapped_column(SmallInteger, primary_key=True, autoincrement=False)
     name: Mapped[str] = mapped_column(Text, nullable=False)

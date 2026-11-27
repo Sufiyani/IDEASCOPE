@@ -7,18 +7,18 @@ Adds an AuditLog row in the SAME transaction as the triggering change.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy.orm import Session
 
 
 def write_audit(
     db: Session,
-    actor_id: Optional[int],
+    actor_id: int | None,
     action: str,
-    target_type: Optional[str] = None,
-    target_id: Optional[int] = None,
-    details: Optional[Any] = None,
+    target_type: str | None = None,
+    target_id: int | None = None,
+    details: Any | None = None,
 ) -> None:
     """
     Persist a single audit log entry within the current transaction.

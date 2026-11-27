@@ -3,8 +3,6 @@ Tests for group endpoints.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-import pytest
-
 from app.core.constants import DEFAULT_MAX_GROUP_SIZE
 
 
@@ -59,7 +57,7 @@ def test_add_member(client, student_token, admin_token, db):
     s2_user_id = s2["user"]["id"]
     s2_pass = s2["temporary_password"]
     s2_login = client.post("/auth/login", json={"username": "2023f-bse-002", "password": s2_pass})
-    s2_token = s2_login.json()["access_token"]
+    _ = s2_login.json()["access_token"]
 
     # Student joins himself
     r = client.post(
@@ -84,7 +82,9 @@ def test_group_full(client, student_token, admin_token):
         )
 
     # One more should fail
-    extra = _make_student(client, admin_token, f"2023F-BSE-{DEFAULT_MAX_GROUP_SIZE + 1:03d}", "extra")
+    extra = _make_student(
+        client, admin_token, f"2023F-BSE-{DEFAULT_MAX_GROUP_SIZE + 1:03d}", "extra"
+    )
     r = client.post(
         f"/groups/{group_id}/members",
         json={"user_id": extra["user"]["id"]},
@@ -115,7 +115,15 @@ def test_leader_transfer_on_leave(client, student_token, admin_token, student_us
     s2_id = s2["user"]["id"]
     s2_pass = s2["temporary_password"]
     s2_login = client.post("/auth/login", json={"username": "2023f-bse-010", "password": s2_pass})
-    s2_token = s2_login.json()["access_token"]
+    s2_token_tmp = s2_login.json()["access_token"]
+
+    # s2 must change password first
+    cp = client.post(
+        "/auth/change-password",
+        json={"current_password": s2_pass, "new_password": "Student99!"},
+        headers=_auth(s2_token_tmp),
+    )
+    s2_token = cp.json()["access_token"]
 
     # Leader adds s2
     client.post(

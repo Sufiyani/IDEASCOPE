@@ -10,16 +10,15 @@ from __future__ import annotations
 import hashlib
 import secrets
 import string
-from datetime import datetime, timedelta, timezone
-from typing import Optional
+from datetime import UTC, datetime, timedelta
 
 import bcrypt
 import jwt
 
 from app.core.config import settings
 
-
 # ── Password hashing ──────────────────────────────────────────────────────────
+
 
 def hash_password(plain: str) -> str:
     """Return a bcrypt hash of the plain-text password."""
@@ -37,8 +36,9 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 # ── Token helpers ─────────────────────────────────────────────────────────────
 
+
 def _now_utc() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def create_access_token(user_id: int) -> str:
@@ -66,7 +66,7 @@ def create_refresh_token(user_id: int) -> str:
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
-def decode_token(token: str) -> Optional[dict]:
+def decode_token(token: str) -> dict | None:
     """Decode and verify a JWT; return payload dict or None on any error."""
     try:
         return jwt.decode(

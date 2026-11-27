@@ -3,8 +3,6 @@ IdeaScope – User management router.
 Owner: Member 2 (Sufiyaan Imran)
 """
 
-from typing import Optional
-
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
@@ -18,9 +16,9 @@ router = APIRouter(tags=["Users"])
 
 @router.get("")
 def list_users(
-    role: Optional[str] = Query(None),
-    is_active: Optional[bool] = Query(None),
-    q: Optional[str] = Query(None),
+    role: str | None = Query(None),
+    is_active: bool | None = Query(None),
+    q: str | None = Query(None),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
@@ -45,6 +43,7 @@ def get_user(
     actor=Depends(require_admin),
 ):
     from app.services.auth_service import _user_to_dict
+
     u = user_service.get_user(db, user_id)
     return _user_to_dict(u)
 

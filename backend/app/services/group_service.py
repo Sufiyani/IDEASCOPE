@@ -5,22 +5,20 @@ Owner: Member 2 (Sufiyaan Imran)
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
-from fastapi import HTTPException, status
-from sqlalchemy import func, or_, select
+from fastapi import HTTPException
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.constants import DEFAULT_MAX_GROUP_SIZE, ROLE_STUDENT
 from app.models.group import Group, GroupMember
 from app.models.user import User
-from app.services.auth_service import _user_to_dict
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _get_max_group_size(db: Session) -> int:
@@ -28,6 +26,7 @@ def _get_max_group_size(db: Session) -> int:
     try:
         with db.begin_nested():
             from sqlalchemy import text
+
             row = db.execute(
                 text("SELECT value FROM settings WHERE key = 'max_group_size' LIMIT 1")
             ).fetchone()
@@ -39,9 +38,7 @@ def _get_max_group_size(db: Session) -> int:
 
 
 def _member_count(db: Session, group_id: int) -> int:
-    return db.scalar(
-        select(func.count()).where(GroupMember.group_id == group_id)
-    ) or 0
+    return db.scalar(select(func.count()).where(GroupMember.group_id == group_id)) or 0
 
 
 def _build_group_out(db: Session, group: Group) -> dict:
@@ -54,15 +51,17 @@ def _build_group_out(db: Session, group: Group) -> dict:
 
     members = []
     for gm, u in members_rows:
-        members.append({
-            "user_id": u.id,
-            "full_name": u.full_name,
-            "username": u.username,
-            "roll_no": u.roll_no,
-            "email": u.email,
-            "joined_at": gm.joined_at.isoformat() if gm.joined_at else None,
-            "is_leader": u.id == group.leader_id,
-        })
+        members.append(
+            {
+                "user_id": u.id,
+                "full_name": u.full_name,
+                "username": u.username,
+                "roll_no": u.roll_no,
+                "email": u.email,
+                "joined_at": gm.joined_at.isoformat() if gm.joined_at else None,
+                "is_leader": u.id == group.leader_id,
+            }
+        )
 
     return {
         "id": group.id,
@@ -107,7 +106,7 @@ def get_my_group(db: Session, actor: User) -> dict:
     return _build_group_out(db, group)
 
 
-def add_member(db: Session, group_id: int, target_user_id: Optional[int], actor: User) -> dict:
+def add_member(db: Session, group_id: int, target_user_id: int | None, actor: User) -> dict:
     group = db.get(Group, group_id)
     if group is None:
         raise HTTPException(status_code=404, detail="group_not_found")
@@ -169,9 +168,7 @@ def remove_member(db: Session, group_id: int, user_id: int, actor: User) -> None
     db.flush()
 
     remaining = db.scalars(
-        select(GroupMember)
-        .where(GroupMember.group_id == group_id)
-        .order_by(GroupMember.joined_at)
+        select(GroupMember).where(GroupMember.group_id == group_id).order_by(GroupMember.joined_at)
     ).all()
 
     if not remaining:
@@ -191,7 +188,7 @@ def remove_member(db: Session, group_id: int, user_id: int, actor: User) -> None
 
 def list_groups(
     db: Session,
-    q: Optional[str],
+    q: str | None,
     page: int,
     page_size: int,
 ) -> dict:
@@ -206,14 +203,16 @@ def list_groups(
 
     items = []
     for g in groups:
-        items.append({
-            "id": g.id,
-            "name": g.name,
-            "batch": g.batch,
-            "leader_id": g.leader_id,
-            "created_at": g.created_at.isoformat() if g.created_at else None,
-            "member_count": _member_count(db, g.id),
-        })
+        items.append(
+            {
+                "id": g.id,
+                "name": g.name,
+                "batch": g.batch,
+                "leader_id": g.leader_id,
+                "created_at": g.created_at.isoformat() if g.created_at else None,
+                "member_count": _member_count(db, g.id),
+            }
+        )
 
     return {"items": items, "total": total or 0, "page": page, "page_size": page_size}
 
@@ -224,12 +223,15 @@ def get_group(db: Session, group_id: int, actor: User) -> dict:
         raise HTTPException(status_code=404, detail="group_not_found")
 
     is_admin = actor.role != ROLE_STUDENT
-    is_member = db.scalar(
-        select(GroupMember).where(
-            GroupMember.group_id == group_id,
-            GroupMember.user_id == actor.id,
+    is_member = (
+        db.scalar(
+            select(GroupMember).where(
+                GroupMember.group_id == group_id,
+                GroupMember.user_id == actor.id,
+            )
         )
-    ) is not None
+        is not None
+    )
 
     if not (is_admin or is_member):
         raise HTTPException(status_code=403, detail="forbidden")

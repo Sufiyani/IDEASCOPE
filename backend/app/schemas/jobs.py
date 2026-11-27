@@ -5,7 +5,7 @@ Owner: Member 2 (Sufiyaan Imran)
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -19,9 +19,9 @@ class JobOut(BaseModel):
     status: str
     progress: int
     attempts: int
-    error: Optional[str]
-    result: Optional[Any]
-    created_by: Optional[int]
+    error: str | None
+    result: Any | None
+    created_by: int | None
     created_at: str
-    started_at: Optional[str]
-    finished_at: Optional[str]
+    started_at: str | None
+    finished_at: str | None

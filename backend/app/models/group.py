@@ -9,7 +9,16 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Index, PrimaryKeyConstraint, Text, UniqueConstraint, func
+from sqlalchemy import (
+    BigInteger,
+    DateTime,
+    ForeignKey,
+    Index,
+    PrimaryKeyConstraint,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
@@ -18,16 +27,12 @@ from app.models.base import Base
 class Group(Base):
     __tablename__ = "groups"
 
-    __table_args__ = (
-        Index("ix_groups_leader_id", "leader_id"),
-    )
+    __table_args__ = (Index("ix_groups_leader_id", "leader_id"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(Text, nullable=False)
     batch: Mapped[str] = mapped_column(Text, nullable=False)
-    leader_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("users.id"), nullable=False
-    )
+    leader_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
@@ -46,9 +51,7 @@ class GroupMember(Base):
     group_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("groups.id", ondelete="CASCADE"), nullable=False
     )
-    user_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("users.id"), nullable=False
-    )
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=False)
     joined_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
