@@ -30,6 +30,13 @@ def _check_uniqueness(
     roll_no: str | None = None,
     exclude_id: int | None = None,
 ) -> None:
+    if roll_no:
+        q = select(User).where(User.roll_no == roll_no)
+        if exclude_id:
+            q = q.where(User.id != exclude_id)
+        if db.scalar(q):
+            raise HTTPException(status_code=409, detail="roll_no_already_exists")
+
     if username:
         q = select(User).where(User.username == username)
         if exclude_id:
@@ -43,13 +50,6 @@ def _check_uniqueness(
             q = q.where(User.id != exclude_id)
         if db.scalar(q):
             raise HTTPException(status_code=409, detail="email_already_exists")
-
-    if roll_no:
-        q = select(User).where(User.roll_no == roll_no)
-        if exclude_id:
-            q = q.where(User.id != exclude_id)
-        if db.scalar(q):
-            raise HTTPException(status_code=409, detail="roll_no_already_exists")
 
 
 def list_users(

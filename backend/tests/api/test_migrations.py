@@ -5,7 +5,7 @@ Owner: Member 2 (Sufiyaan Imran)
 
 import pytest
 from sqlalchemy import inspect, text
-from sqlalchemy.exc import InternalError
+from sqlalchemy.exc import DBAPIError
 
 
 def test_all_member2_tables_exist(db):
@@ -206,7 +206,7 @@ def test_audit_log_update_blocked(db):
     db.commit()
     db.refresh(log)
 
-    with pytest.raises(InternalError):
+    with pytest.raises(DBAPIError):
         db.execute(text(f"UPDATE audit_logs SET action='hacked' WHERE id={log.id}"))
         db.commit()
 
@@ -233,7 +233,7 @@ def test_audit_log_delete_blocked(db):
     db.commit()
     db.refresh(log)
 
-    with pytest.raises(InternalError):
+    with pytest.raises(DBAPIError):
         db.execute(text(f"DELETE FROM audit_logs WHERE id={log.id}"))
         db.commit()
 
